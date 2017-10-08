@@ -7,25 +7,28 @@
 <head>
   <meta charset="utf-8">
   
-  <title>hexo + github/coding搭建blog | 莫等闲、白了少年头</title>
+  <title>原型模式 | 莫等闲、白了少年头</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="blog," />
+    <meta name="keywords" content="设计模式," />
   
 
-  <meta name="description" content="想了很久是不是需要搭建个人博客，最后还是搭建。刚好加班没事干就把方法分享出来，希望能够帮助有需要的人!为什么会用coding，是因为gibhub是在太慢了。 快速预览安装git1$ brew install git 手动下载地址 : git 安装node安装node可以先安装nvm(node 版本管理器) 1$ brew install nvm 安装完可以通过nvm安装和管理node版本 1$ n">
-<meta name="keywords" content="blog">
+  <meta name="description" content="原型模式原型模式的原理new一个对象，通过对象的clone方法实现对象复制就是原型模式核心就是一个clone方法，通过Cloneable接口实现对象的拷贝public class PrototypeClass { @Override public PrototypeClass clone(){     PrototypeClass prototypeClass = null;      try {">
+<meta name="keywords" content="设计模式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hexo + github&#x2F;coding搭建blog">
-<meta property="og:url" content="http://chenxulun.xyz/2016/08/02/hello-world/index.html">
+<meta property="og:title" content="原型模式">
+<meta property="og:url" content="http://chenxulun.xyz/2017/10/08/原型模式/index.html">
 <meta property="og:site_name" content="莫等闲、白了少年头">
-<meta property="og:description" content="想了很久是不是需要搭建个人博客，最后还是搭建。刚好加班没事干就把方法分享出来，希望能够帮助有需要的人!为什么会用coding，是因为gibhub是在太慢了。 快速预览安装git1$ brew install git 手动下载地址 : git 安装node安装node可以先安装nvm(node 版本管理器) 1$ brew install nvm 安装完可以通过nvm安装和管理node版本 1$ n">
-<meta property="og:updated_time" content="2017-09-26T09:59:43.000Z">
+<meta property="og:description" content="原型模式原型模式的原理new一个对象，通过对象的clone方法实现对象复制就是原型模式核心就是一个clone方法，通过Cloneable接口实现对象的拷贝public class PrototypeClass { @Override public PrototypeClass clone(){     PrototypeClass prototypeClass = null;      try {">
+<meta property="og:image" content="http://oxhvfchj1.bkt.clouddn.com/%E4%B8%8B%E8%BD%BD.png">
+<meta property="og:image" content="http://oxhvfchj1.bkt.clouddn.com/WechatIMG10592.jpeg">
+<meta property="og:updated_time" content="2017-10-08T08:17:28.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hexo + github&#x2F;coding搭建blog">
-<meta name="twitter:description" content="想了很久是不是需要搭建个人博客，最后还是搭建。刚好加班没事干就把方法分享出来，希望能够帮助有需要的人!为什么会用coding，是因为gibhub是在太慢了。 快速预览安装git1$ brew install git 手动下载地址 : git 安装node安装node可以先安装nvm(node 版本管理器) 1$ brew install nvm 安装完可以通过nvm安装和管理node版本 1$ n">
+<meta name="twitter:title" content="原型模式">
+<meta name="twitter:description" content="原型模式原型模式的原理new一个对象，通过对象的clone方法实现对象复制就是原型模式核心就是一个clone方法，通过Cloneable接口实现对象的拷贝public class PrototypeClass { @Override public PrototypeClass clone(){     PrototypeClass prototypeClass = null;      try {">
+<meta name="twitter:image" content="http://oxhvfchj1.bkt.clouddn.com/%E4%B8%8B%E8%BD%BD.png">
 
   
 
@@ -162,20 +165,20 @@
 
   <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#快速预览"><span class="toc-text">快速预览</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装git"><span class="toc-text">安装git</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装node"><span class="toc-text">安装node</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装hexo"><span class="toc-text">安装hexo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#初始化"><span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置github和coding"><span class="toc-text">配置github和coding</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#大功告成"><span class="toc-text">大功告成</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#原型模式"><span class="toc-text">原型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#原型模式的原理"><span class="toc-text">原型模式的原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原型模式优点"><span class="toc-text">原型模式优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原型模式的使用场景"><span class="toc-text">原型模式的使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注意事项"><span class="toc-text">注意事项</span></a></li></ol></li></ol>
   </div>
 
 
 
 <div class="content content-post CENTER">
-   <article id="post-hello-world" class="article article-type-post" itemprop="blogPost">
+   <article id="post-原型模式" class="article article-type-post" itemprop="blogPost">
   <header class="article-header">
-    <h1 class="post-title">hexo + github/coding搭建blog</h1>
+    <h1 class="post-title">原型模式</h1>
 
     <div class="article-meta">
       <span>
         <i class="icon-calendar"></i>
-        <span>2016.08.02</span>
+        <span>2017.10.08</span>
       </span>
 
       
@@ -191,7 +194,7 @@
       
         <span>
           <i class="icon-comment"></i>
-          <a href="http://www.forsigner.com/2016/08/02/hello-world/#disqus_thread"></a>
+          <a href="http://www.forsigner.com/2017/10/08/原型模式/#disqus_thread"></a>
         </span>
       
 
@@ -210,39 +213,22 @@
 
   <div class="article-content">
     
-      <p>想了很久是不是需要搭建个人博客，最后还是搭建。<br>刚好加班没事干就把方法分享出来，希望能够帮助有需要的人!<br>为什么会用coding，是因为gibhub是在太慢了。</p>
-<h2 id="快速预览"><a href="#快速预览" class="headerlink" title="快速预览"></a>快速预览</h2><h3 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ brew install git</div></pre></td></tr></table></figure>
-<p>手动下载地址 : <a href="https://git-scm.com/downloads" target="_blank" rel="external">git</a></p>
-<h3 id="安装node"><a href="#安装node" class="headerlink" title="安装node"></a>安装node</h3><p>安装node可以先安装nvm(node 版本管理器)</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ brew install nvm</div></pre></td></tr></table></figure>
-<p>安装完可以通过nvm安装和管理node版本</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ nvm ls  显示node列表</div></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ nvm use  version </div><div class="line"></div><div class="line">$ nvm <span class="built_in">alias</span> default &lt;version&gt; 指定默认版本</div></pre></td></tr></table></figure>
-<p>这个地方有坑，如果之前安装过通过brew，可以先卸载，在进入hexo安装之前node必须正确安装</p>
-<h3 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装hexo</h3><p>执行一下命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install -g hexo or npm install -g hexo-cli</div></pre></td></tr></table></figure>
-<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>新建目录，切换进目录执行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo init</div></pre></td></tr></table></figure>
-<p>执行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install</div></pre></td></tr></table></figure>
-<p>本地预览</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo s or hexo server</div></pre></td></tr></table></figure>
-<p>浏览器中打开网址 <a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a><br>成功就OK了，只需要准备coding和github账号。</p>
-<h3 id="配置github和coding"><a href="#配置github和coding" class="headerlink" title="配置github和coding"></a>配置github和coding</h3><p>注册github和coding账号（这就不多说）。<br>GitHub工程名必须是 【your_user_name.github.io】<br>coding工程名必须和你用户名一样,比如我的用户名cxl_leo,博客用户名也必须是cxl_leo.</p>
-<p>接下来配置_config.yml文件</p>
-<blockquote>
-<p>vim _config.yml</p>
-</blockquote>
-<p>找到deploy</p>
-<p>deploy:<br>  type: git<br>  repository:<br>    github: <a href="https://github.com/chenxulun/chenxulun.github.io.git,master" target="_blank" rel="external">https://github.com/chenxulun/chenxulun.github.io.git,master</a><br>    coding: <a href="https://git.coding.net/cxl_leo/cxl_leo.git,master" target="_blank" rel="external">https://git.coding.net/cxl_leo/cxl_leo.git,master</a></p>
-<h3 id="大功告成"><a href="#大功告成" class="headerlink" title="大功告成"></a>大功告成</h3><p>执行</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ hexo g </div><div class="line">$ hexo d</div></pre></td></tr></table></figure>
-<p>浏览器输入网址：</p>
-<ol>
-<li>github: <a href="https://chenxulun.github.io/" target="_blank" rel="external">https://chenxulun.github.io/</a></li>
-<li>coding: <a href="http://cxl_leo.coding.me/" target="_blank" rel="external">http://cxl_leo.coding.me/</a></li>
-</ol>
-<p>OK 大功告成</p>
+      <h1 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h1><h2 id="原型模式的原理"><a href="#原型模式的原理" class="headerlink" title="原型模式的原理"></a>原型模式的原理</h2><p>new一个对象，通过对象的clone方法实现对象复制就是原型模式<br>核心就是一个clone方法，通过Cloneable接口实现对象的拷贝<br><code><br>public class PrototypeClass {</code></p>
+<pre><code>@Override
+public PrototypeClass clone(){
+    PrototypeClass prototypeClass = null;
+
+    try {
+        prototypeClass = (PrototypeClass)prototypeClass.clone();
+    }catch (Exception e){
+
+    }
+    return prototypeClass;
+}
+</code></pre><p>}<br><br><img src="http://oxhvfchj1.bkt.clouddn.com/%E4%B8%8B%E8%BD%BD.png" alt=""></p>
+<h2 id="原型模式优点"><a href="#原型模式优点" class="headerlink" title="原型模式优点"></a>原型模式优点</h2><p>性能优良<br>二进制流的拷贝，比直接new对象性能好<br>逃避构造函数的约束<br>拷贝对象不会执行构造函数</p>
+<h2 id="原型模式的使用场景"><a href="#原型模式的使用场景" class="headerlink" title="原型模式的使用场景"></a>原型模式的使用场景</h2><p>资源优化场景<br>需要消耗非常多的资源进行类初始化<br>性能和安全<br>new对象需要繁琐的数据准备和访问权限控制<br>一个对象多个修改者</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>构造函数不会被执行：<br>Object类的clone方法的原理是从内存中以二进制流的方式进行拷贝，重新分配<br><img src="http://oxhvfchj1.bkt.clouddn.com/WechatIMG10592.jpeg" alt=""><br>内存块<br>浅拷贝和深拷贝<br>浅拷贝：只克隆基本类型和String类型的数据，不复制引用类型，对象中引用对象还是指向远对象<br>深拷贝：除浅拷贝外对应用对象也进行复制，注意循环引用问题</p>
 
     
   </div>
@@ -273,10 +259,10 @@
 
    
   <div class="box-prev-next clearfix">
-    <a class="hide pull-left" href="/">
+    <a class="show pull-left" href="/2017/10/08/解忧杂货店/">
         <i class="icon icon-angle-left"></i>
     </a>
-    <a class="show pull-right" href="/2016/09/18/一些小工具/">
+    <a class="hide pull-right" href="/">
         <i class="icon icon-angle-right"></i>
     </a>
   </div>
@@ -379,7 +365,7 @@
   <script>
     var disqus_shortname = 'forsigner';
     
-    var disqus_url = 'http://chenxulun.xyz/2016/08/02/hello-world/';
+    var disqus_url = 'http://chenxulun.xyz/2017/10/08/原型模式/';
     
     (function(){
       var dsq = document.createElement('script');
