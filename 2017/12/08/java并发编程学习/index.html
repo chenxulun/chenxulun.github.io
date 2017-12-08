@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>java并发编程学习 | 莫等闲、白了少年头</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="技术," />
+  
+
+  <meta name="description" content="java并发编程笔记软硬件技术原则 在不改变执行结果的前提下，尽可能提高并行度JMM在实现这一原则的基本方针是：在不改变程序执行结果的前提下，尽可能减少编译器和处理器优化的限制 CPU通过时间片分配算法循环执行任务，切换上下文会影响多线程执行速度，切换之前会保存上一个任务的状态。编写线程安全的代码，主要就是对共享和可变的状态的访问。  低层实现原理 volatile实现原理   轻量级synchr">
+<meta name="keywords" content="技术">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java并发编程学习">
+<meta property="og:url" content="http://chenxulun.xyz/2017/12/08/java并发编程学习/index.html">
+<meta property="og:site_name" content="莫等闲、白了少年头">
+<meta property="og:description" content="java并发编程笔记软硬件技术原则 在不改变执行结果的前提下，尽可能提高并行度JMM在实现这一原则的基本方针是：在不改变程序执行结果的前提下，尽可能减少编译器和处理器优化的限制 CPU通过时间片分配算法循环执行任务，切换上下文会影响多线程执行速度，切换之前会保存上一个任务的状态。编写线程安全的代码，主要就是对共享和可变的状态的访问。  低层实现原理 volatile实现原理   轻量级synchr">
+<meta property="og:image" content="http://oxhvfchj1.bkt.clouddn.com/jmm.png">
+<meta property="og:image" content="http://oxhvfchj1.bkt.clouddn.com/concurrent.png">
+<meta property="og:image" content="http://oxhvfchj1.bkt.clouddn.com/state.png">
+<meta property="og:image" content="http://oxhvfchj1.bkt.clouddn.com/customers.png">
+<meta property="og:updated_time" content="2017-12-08T02:17:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java并发编程学习">
+<meta name="twitter:description" content="java并发编程笔记软硬件技术原则 在不改变执行结果的前提下，尽可能提高并行度JMM在实现这一原则的基本方针是：在不改变程序执行结果的前提下，尽可能减少编译器和处理器优化的限制 CPU通过时间片分配算法循环执行任务，切换上下文会影响多线程执行速度，切换之前会保存上一个任务的状态。编写线程安全的代码，主要就是对共享和可变的状态的访问。  低层实现原理 volatile实现原理   轻量级synchr">
+<meta name="twitter:image" content="http://oxhvfchj1.bkt.clouddn.com/jmm.png">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/category/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tag/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/link/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            友链
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#java并发编程笔记"><span class="toc-text">java并发编程笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#软硬件技术原则"><span class="toc-text">软硬件技术原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#低层实现原理"><span class="toc-text">低层实现原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#java内存模型"><span class="toc-text">java内存模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#并发编程"><span class="toc-text">并发编程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#java中的锁"><span class="toc-text">java中的锁</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-java并发编程学习" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">java并发编程学习</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2017.12.08</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>陈先生</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </span>
+
+
+
+      
+        <span>
+          <i class="icon-comment"></i>
+          <a href="http://www.forsigner.com/2017/12/08/java并发编程学习/#disqus_thread"></a>
+        </span>
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="java并发编程笔记"><a href="#java并发编程笔记" class="headerlink" title="java并发编程笔记"></a>java并发编程笔记</h1><h3 id="软硬件技术原则"><a href="#软硬件技术原则" class="headerlink" title="软硬件技术原则"></a>软硬件技术原则</h3><blockquote>
+<p>在不改变执行结果的前提下，尽可能提高并行度<br>JMM在实现这一原则的基本方针是：在不改变程序执行结果的前提下，尽可能减少编译器和处理器优化的限制</p>
+<p>CPU通过时间片分配算法循环执行任务，切换上下文会影响多线程执行速度，切换之前会保存上一个任务的状态。编写线程安全的代码，主要就是对共享和可变的状态的访问。</p>
+</blockquote>
+<h3 id="低层实现原理"><a href="#低层实现原理" class="headerlink" title="低层实现原理"></a>低层实现原理</h3><ul>
+<li>volatile实现原理</li>
+</ul>
+<blockquote>
+<p>轻量级synchronized，不会引起线程上下文切换和调度，java线程内存模型确保所有线程看到这个变量的值是一致的。<br>实现原则：<br>lock指令会讲当前处理器缓存回写到内存<br>一个处理器的缓存回写到内存会导致其他处理器的缓存无效</p>
+</blockquote>
+<ul>
+<li>synchronized的实现原理与应用</li>
+</ul>
+<blockquote>
+<p>java每个对象都可以作为锁，基于进入或者推出Monitor加入monitorenter和monitorexit指令</p>
+</blockquote>
+<ul>
+<li>原子操作</li>
+</ul>
+<blockquote>
+<p>处理器：使用总线锁和缓存锁保证内存操作的原子性<br>java：锁和循环cas<br>循环cas:<br>ABA问题 解决方法：版本号<br>循环时间开销大<br>只能保证一个共享变量的原子操作</p>
+</blockquote>
+<h3 id="java内存模型"><a href="#java内存模型" class="headerlink" title="java内存模型"></a>java内存模型</h3><ul>
+<li>并发编程关键问题</li>
+</ul>
+<blockquote>
+<p>线程之间如何通信<br>线程之间如何同步<br>java内存模型抽象：<br><img src="http://oxhvfchj1.bkt.clouddn.com/jmm.png" alt=""><br> 从图可以看出，线程通信需要经历两步：<br> 线程A讲本地内存值刷新到主内存<br> 线程B到主内存读取A之前已更新过的共享变量</p>
+</blockquote>
+<ul>
+<li>重排序</li>
+</ul>
+<blockquote>
+<p>为了提高性能，编译器和处理器常常会对指令做重排序。<br> 1、编译器优化的重排序<br> 2、指令级并行的重排序<br> 3、内存系统的重排序<br> 源代码——&gt;编译器优化的重排——&gt;指令级并行的重排序——&gt;内存系统的重排序——&gt;最终执行的指令序列<br>双检锁问题（重排序）</p>
+</blockquote>
+<ul>
+<li>volatile内存语义</li>
+</ul>
+<blockquote>
+<p>volatile的写、读与锁的释放获取有相同的内存效果<br>Volatile写内存语义：当写一个Volatile变量时，JMM会把该线程对应的本地内存刷新到主内存<br>volatile读内存语义：当读一个Volatile变量时，JMM会把该线程对应的本地内存制为无效，该线程将从主内存中读取共享变量<br>首先保证正确性，然后再去追求执行效率<br>锁的内存语义：<br>除了让临界区互斥执行外，还可以让释放锁的线程向获取同一个锁的线程发送消息<br>当线程释放锁时，JMM会把该线程对应的本地内存中的变量刷新到主内存中</p>
+</blockquote>
+<ul>
+<li>concurrent包的实现</li>
+</ul>
+<blockquote>
+<p>首先声明共享变量为volatile<br>使用cas原子条件更新来实现线程之间的同步<br>配合volatile读写和cas所具有的volatile读写的内存语义实现线程之间的通信<br>concurrent实现示意图：<br><img src="http://oxhvfchj1.bkt.clouddn.com/concurrent.png" alt=""></p>
+</blockquote>
+<h3 id="并发编程"><a href="#并发编程" class="headerlink" title="并发编程"></a>并发编程</h3><ul>
+<li>多线程好处</li>
+</ul>
+<blockquote>
+<p>更多处理器核心<br>更快的响应时间</p>
+</blockquote>
+<ul>
+<li><p>线程状态<br><img src="http://oxhvfchj1.bkt.clouddn.com/state.png" alt=""></p>
+</li>
+<li><p>线程间通信方式</p>
+</li>
+</ul>
+<blockquote>
+<p>volatile和synchronized<br>等待通知机制：<br>等待/通知机制依托于同步机制，其目的就是确保等待线程从<br>wait()方法返回时能够感知到通知线程对变量做出的修改<br><img src="http://oxhvfchj1.bkt.clouddn.com/customers.png" alt=""></p>
+<p>管道输入/输出流<br>线程池：<br>线程池的本质就是使用了一个线程安全的工作队列连接工作者线程和客户端<br>线程，客户端线程将任务放入工作队列后便返回，而工作者线程则不断地从工作队列上取出<br>工作并执行。当工作队列为空时，所有的工作者线程均等待在工作队列上，当有客户端提交了<br>一个任务之后会通知任意一个工作者线程，随着大量的任务被提交，更多的工作者线程会被<br>唤醒。</p>
+</blockquote>
+<h3 id="java中的锁"><a href="#java中的锁" class="headerlink" title="java中的锁"></a>java中的锁</h3><blockquote>
+<p>Lock<br>同步器AbstractQueuedSynchronizer<br>同步器设置尾节点提供compareAndSetTail(Node expect,Node update)<br>首节点设置获取同步状态的节点将自己next节点设置成首节点</p>
+<p>ReentrantLock 可重入锁，表示支持一个线程对资源的重复加锁，还支持获取锁时的公平和非公平性选择<br>成功获取锁的线程再次获取锁，只是增加了同步状态值，要求ReentrantLock在释放同步状态时减少同步状态值，同步状态为0时，将沾有线程设置为null，返回true<br>公平获取锁是指锁的获取顺序应该符合请求的绝对时间顺序，FIFO</p>
+<p>ReentrantReadWriteLock：公平性、重进入、锁降级（写锁降为读锁）<br>设计原则：假设当前同步状态是S，写状态等于S&amp;&amp;0x0000FFFF(将高16位抹去)，读状态等于S&gt;&gt;&gt;16(无符号补0右移16位)——&gt;S不等于0时，当写状态等于0时，则读状态大于0，即读锁已被获取</p>
+<p>Condition接口：<br>任何一个java对象都拥有一组监控器方法（定义在Object上）：wait、notify等和synchronized配合可以实现等待/通知模式<br>Condition对象由Lock对象创建：await、signal</p>
+<p>ConcurrentHash：锁分段技术，将数据分成一段一段存储，然后给每一个段配一把锁，当一个线程占用锁访问其中一个段数据的时候，其他段的数据也能被其他线程访问</p>
+<p>队列线程安全两种方案：阻塞和非阻塞就是锁和CAS</p>
+</blockquote>
+
+    
+  </div>
+</article>
+
+
+   
+  <div class="text-center donation">
+    <div class="inner-donation">
+      <span class="btn-donation">支持一下</span>
+      <div class="donation-body">
+        <div class="tip text-center">扫一扫，支持 陈先生</div>
+        <ul class="theme.donation.items.length">
+        
+          <li class="item">
+            <img src="/images/qr-wechat.jpeg" alt="">
+          </li>
+        
+          <li class="item">
+            <img src="/images/qr-alipay.jpeg" alt="">
+          </li>
+        
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2017/11/23/大数据分析的道与术/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/category/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tag/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/link/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              友链
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+  <section class="disqus-comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+  </section>
+
+  <script>
+    var disqus_shortname = 'forsigner';
+    
+    var disqus_url = 'http://chenxulun.xyz/2017/12/08/java并发编程学习/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+  <script id="dsq-count-scr" src="//forsigner.disqus.com/count.js" async></script>
+
+
+
+    
+
+
+
+
+    
+
+    
+	
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
